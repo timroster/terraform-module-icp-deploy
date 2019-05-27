@@ -64,20 +64,20 @@ then
   ### Setup kubectl
 
   # use kubectl from container
-  kubectl="sudo docker run -e LICENSE=accept --net=host -v ${cluster_dir}:/installer/cluster -v /root:/root ${registry}${registry:+/}${org}/${repo}:${tag} kubectl"
+  # kubectl="sudo docker run -e LICENSE=accept --net=host -v ${cluster_dir}:/installer/cluster -v /root:/root ${registry}${registry:+/}${org}/${repo}:${tag} kubectl"
 
-  $kubectl config set-cluster cfc-cluster --server=https://localhost:8001 --insecure-skip-tls-verify=true
-  $kubectl config set-context kubectl --cluster=cfc-cluster
-  $kubectl config set-credentials user --client-certificate=/installer/cluster/cfc-certs/kubecfg.crt --client-key=/installer/cluster/cfc-certs/kubecfg.key
-  $kubectl config set-context kubectl --user=user
-  $kubectl config use-context kubectl
+  # $kubectl config set-cluster cfc-cluster --server=https://localhost:8001 --insecure-skip-tls-verify=true
+  # $kubectl config set-context kubectl --cluster=cfc-cluster
+  # $kubectl config set-credentials user --client-certificate=/installer/cluster/cfc-certs/kubecfg.crt --client-key=/installer/cluster/cfc-certs/kubecfg.key
+  # $kubectl config set-context kubectl --user=user
+  # $kubectl config use-context kubectl
 
   list=$(IFS=, ; echo "${removed[*]}")
 
   for ip in "${removed[@]}"; do
-    $kubectl delete node $ip
+    kubectl delete node $ip
     sudo sed -i "/^${ip} /d" /etc/hosts
-    sudo sed -i "/^${ip} /d" ${cluster_dir}/hosts
+    sudo sed -i "/^${ip}/d" ${cluster_dir}/hosts
   done
 
 fi
